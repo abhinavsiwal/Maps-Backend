@@ -106,7 +106,7 @@ const updatePlaceById = async(req, res,next) => {
   if (!errors.isEmpty()) {
     console.log(errors);
 
-    throw new HttpError("Invalid Inputs passed,please check your data", 422);
+    return next( new HttpError("Invalid Inputs passed,please check your data", 422));
   }
   const { title, description } = req.body;
   const placeId = req.params.pid;
