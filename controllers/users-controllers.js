@@ -24,7 +24,7 @@ const signup = async (req, res, next) => {
 
     throw new HttpError("Invalid Inputs passed,please check your data", 422);
   }
-  const { name, email, password, image } = req.body;
+  const { name, email, password } = req.body;
   let existingUser;
   try {
     existingUser = await User.findOne({ email: email });
@@ -48,7 +48,7 @@ const signup = async (req, res, next) => {
   const createdUser = new User({
     name,
     email,
-    image,
+    image:req.file.path,
     password,
     places: [],
   });
@@ -89,7 +89,7 @@ const login = async (req, res, next) => {
     return next(error);
   }
 
-  res.json({ message: "Logged In" });
+  res.json({ message: "Logged In",user:existingUser.toObject({getters:true}) });
 };
 
 exports.getUsers = getUsers;

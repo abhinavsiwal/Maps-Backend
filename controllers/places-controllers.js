@@ -1,4 +1,5 @@
 const HttpError = require("../models/http-error");
+const fs =require('fs');
 const { v4: uuidv4, v4 } = require("uuid");
 const { validationResult } = require("express-validator");
 const getCoordsForAddress = require("../util/location");
@@ -50,7 +51,7 @@ const createPlace = async (req, res, next) => {
 
     next(new HttpError("Invalid Inputs passed,please check your data", 422));
   }
-  const { title, description, address, creator,image } = req.body;
+  const { title, description, address, creator} = req.body;
   let coordinates;
   try {
     coordinates = await getCoordsForAddress(address);
@@ -63,7 +64,7 @@ const createPlace = async (req, res, next) => {
     description,
     address,
     location: coordinates,
-    image,
+    image:req.file.path,
     creator,
   });
   let user;
@@ -94,7 +95,7 @@ console.log(user);
     const error = new HttpError('Creating Place failed,please try again',500)
     return next(error);
   }
-  res.status(201).json({ place: createdPlace });
+  res.status(201).json({ place: createdPlace.toObject({getters:true}) });
 };
 
 const updatePlaceById = async(req, res,next) => {
@@ -145,6 +146,7 @@ const deletePlace = async(req, res) => {
     const error = new HttpError('Could not find place for this id',404);
     return next(error);
   }
+  const imagePath = place.image;
   try{
     const sess = await mongoose.startSession();
     sess.startTransaction();
@@ -157,6 +159,9 @@ const deletePlace = async(req, res) => {
     const error = new HttpError('Something went wrong,could not delete Place',500);
     return next(error);
   }
+  fs.unlink(imagePath,err=>{
+    console.log(err);
+  });
   res.status(200).json({ message: "Deleted Place" });
 };
 
