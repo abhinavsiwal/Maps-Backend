@@ -142,7 +142,7 @@ const login = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     const error = new HttpError(
-      "JWT Login Error.",
+      `JWT Login Error. ${err}`,
       500
     );
     return next(error);
