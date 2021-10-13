@@ -86,7 +86,7 @@ const signup = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     const error = new HttpError(
-      "Signing up failed,please try again later.",
+      "JWT signup error.",
       500
     );
     return next(error);
@@ -142,7 +142,7 @@ const login = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     const error = new HttpError(
-      "Login failed,please try again later.",
+      "JWT Login Error.",
       500
     );
     return next(error);
