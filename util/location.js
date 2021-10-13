@@ -24,8 +24,8 @@ const getCoordsForAddress=async(address)=>{
 
 
     const coordinates={
-        lat:40.7484474,
-        lng:-73.9871516,
+        lat:28.644800,
+        lng:77.216721,
     }
     return coordinates;
 }
